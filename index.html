@@ -51,13 +51,13 @@
 
     #app-container {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       height: 100dvh;
       max-height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: env(safe-area-inset-top, 6px) 10px env(safe-area-inset-bottom, 8px) 10px;
+      padding: env(safe-area-inset-top, 6px) 12px env(safe-area-inset-bottom, 12px) 12px;
       position: relative;
     }
 
@@ -66,19 +66,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 38px;
-      padding: 0 4px;
+      height: 32px;
+      margin-bottom: 2px;
     }
 
     .badge {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      padding: 4px 10px;
-      font-size: 0.85rem;
+      padding: 2px 8px;
+      font-size: 0.8rem;
       font-weight: 900;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
@@ -87,64 +87,77 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: white;
       border-radius: 50%;
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
-    /* Spielfeld */
+    .back-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      margin-bottom: 4px;
+    }
+
+    /* Spielfeld (Kompakt) */
     #pitch-container {
       flex: 1;
-      min-height: 140px;
-      max-height: 220px;
+      min-height: 100px;
+      max-height: 145px;
       background: repeating-linear-gradient(
         0deg,
         var(--pitch-green),
-        var(--pitch-green) 24px,
-        var(--pitch-stripe) 24px,
-        var(--pitch-stripe) 48px
+        var(--pitch-green) 18px,
+        var(--pitch-stripe) 18px,
+        var(--pitch-stripe) 36px
       );
-      border-radius: 16px;
+      border-radius: 12px;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.3);
       overflow: hidden;
-      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 6px 16px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
       margin-bottom: 6px;
     }
 
     #goal {
       position: absolute;
-      top: 6px;
+      top: 4px;
       left: 50%;
       transform: translateX(-50%);
-      width: 58%;
-      height: 60px;
-      border: 3px solid #ffffff;
+      width: 55%;
+      height: 48px;
+      border: 2px solid #ffffff;
       border-bottom: none;
       border-radius: 4px 4px 0 0;
-      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 7px, transparent 7px, transparent 14px);
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 6px, transparent 6px, transparent 12px);
     }
 
     #keeper {
       position: absolute;
-      top: 26px;
+      top: 20px;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       transition: left 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 2;
     }
 
     #ball {
       position: absolute;
-      bottom: 12px;
+      bottom: 8px;
       left: 50%;
       transform: translate(-50%, 50%);
-      font-size: 1.9rem;
+      font-size: 1.6rem;
       z-index: 3;
       transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
     }
@@ -152,26 +165,25 @@
     /* Aufgabenteil */
     #task-container {
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 10px 14px;
+      border-radius: 12px;
+      padding: 6px 10px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
       margin-bottom: 6px;
     }
 
     .task-label {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #90caf9;
       font-weight: 900;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .question {
       font-family: 'Fredoka', cursive;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       color: var(--accent-yellow);
       letter-spacing: 1px;
       line-height: 1.1;
@@ -179,11 +191,11 @@
 
     .answer-display {
       font-family: 'Fredoka', cursive;
-      font-size: 1.4rem;
-      min-height: 34px;
+      font-size: 1.2rem;
+      min-height: 28px;
       border: 1px dashed rgba(255, 255, 255, 0.25);
-      border-radius: 10px;
-      margin-top: 4px;
+      border-radius: 8px;
+      margin-top: 3px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -191,32 +203,32 @@
       background: rgba(0, 0, 0, 0.2);
     }
 
-    /* Nummernblock */
+    /* Nummernblock (Straff & kompakt) */
     #keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 2px;
+      gap: 5px;
+      margin-bottom: 4px;
     }
 
     .key-btn {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
+      border-radius: 10px;
       color: white;
       font-family: 'Fredoka', cursive;
-      font-size: 1.35rem;
-      height: 44px;
+      font-size: 1.25rem;
+      height: 38px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.35);
     }
 
     .key-btn:active {
       transform: translateY(2px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.35);
+      box-shadow: 0 0 0 rgba(0,0,0,0.35);
     }
 
     .key-submit {
@@ -251,6 +263,8 @@
       <button class="icon-btn" id="audio-btn">🔊</button>
     </div>
 
+    <button class="back-btn" onclick="history.back()">⬅ Zurück zum Hauptmenü</button>
+
     <div id="pitch-container">
       <div id="goal"></div>
       <div id="keeper">🦆</div>
@@ -259,7 +273,7 @@
 
     <div id="task-container">
       <div class="task-label">Löse den Power-Schuss:</div>
-      <div class="question" id="task-q">4 × 10</div>
+      <div class="question" id="task-q">4 × 8</div>
       <div class="answer-display" id="task-a">?</div>
     </div>
 
@@ -285,7 +299,7 @@
     let goals = 0;
     let stars = 0;
     let currentInput = "";
-    let n1 = 4, n2 = 10, correctAnswer = 40;
+    let n1 = 4, n2 = 8, correctAnswer = 32;
     let audioEnabled = true;
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -317,7 +331,7 @@
       keeper.style.left = "50%";
       const ball = document.getElementById('ball');
       ball.style.transition = 'none';
-      ball.style.bottom = "12px";
+      ball.style.bottom = "8px";
       ball.style.left = "50%";
       ball.style.transform = "translate(-50%, 50%) scale(1)";
       setTimeout(() => { ball.style.transition = 'all 0.45s cubic-bezier(0.25, 1, 0.5, 1)'; }, 20);
@@ -356,7 +370,7 @@
         const keeperX = targetX > 50 ? 25 : 75;
 
         keeper.style.left = keeperX + "%";
-        ball.style.bottom = "140px";
+        ball.style.bottom = "95px";
         ball.style.left = targetX + "%";
         ball.style.transform = "translate(-50%, 50%) scale(0.65)";
 
@@ -367,7 +381,7 @@
         setTimeout(newTask, 1000);
       } else {
         keeper.style.left = "50%";
-        ball.style.bottom = "120px";
+        ball.style.bottom = "80px";
         ball.style.left = "50%";
         ball.style.transform = "translate(-50%, 50%) scale(0.7)";
 
@@ -378,7 +392,7 @@
         document.getElementById('task-a').innerText = "❌";
         setTimeout(() => {
           document.getElementById('task-a').innerText = "?";
-          ball.style.bottom = "12px";
+          ball.style.bottom = "8px";
           ball.style.transform = "translate(-50%, 50%) scale(1)";
         }, 800);
       }
