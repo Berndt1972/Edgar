@@ -9,922 +9,385 @@
   <link rel="apple-touch-icon" href="https://fav.farm/⚽">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  
   <style>
-    * {
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      margin: 0;
-      padding: 0;
-    }
     :root {
       --bg: #0b1329;
-      --card-bg: rgba(26, 38, 74, 0.85);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --grass-green: #22c55e;
-      --grass-dark: #15803d;
-      --gold: #f59e0b;
-      --pumpkin: #ea580c;
-      --pig-pink: #f472b6;
-      --blue: #3b82f6;
+      --card-bg: rgba(22, 34, 64, 0.95);
+      --pitch-green: #1b8a3e;
+      --pitch-stripe: #157333;
+      --accent-yellow: #fbc02d;
+      --accent-orange: #f57c00;
+      --accent-cyan: #00e5ff;
+      --accent-red: #d32f2f;
       --text: #ffffff;
-      --text-muted: #94a3b8;
     }
-    body {
-      background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 50% 10%, rgba(59, 130, 246, 0.25), transparent 40%),
-        radial-gradient(circle at 80% 90%, rgba(234, 88, 12, 0.2), transparent 40%),
-        linear-gradient(180deg, #090e1f 0%, #111a36 100%);
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
       color: var(--text);
-      font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
+    }
+
+    body {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-      overflow-x: hidden;
+      align-items: center;
+      background: radial-gradient(circle at 50% 10%, #1c2b54 0%, #070a14 100%);
     }
+
     #app-container {
       width: 100%;
-      max-width: 440px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      padding: 16px;
-    }
-    .screen {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .screen.active {
-      display: flex;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .top-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 999px;
-      padding: 8px 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-    .stat-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    .stat-pill.pumpkin { color: #fdba74; }
-    .stat-pill.streak { color: #fca5a5; }
-    .icon-btn {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 4px;
-    }
-    .hero-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 24px 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-    .edgar-avatar {
-      width: 88px;
-      height: 88px;
-      background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 100%);
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 3.2rem;
-      box-shadow: 0 0 25px rgba(244, 114, 182, 0.5), inset 0 2px 4px rgba(255,255,255,0.6);
-      border: 3px solid #fff;
-      animation: bounce 2s infinite ease-in-out;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .speech-bubble {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 18px;
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      color: #e2e8f0;
-      line-height: 1.4;
-      margin-top: 12px;
-      font-weight: 600;
-    }
-    .menu-btn {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 24px;
-      padding: 18px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
-    }
-    .menu-btn:active {
-      transform: scale(0.97);
-    }
-    .menu-btn.green {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.35);
-    }
-    .menu-btn.orange {
-      background: linear-gradient(135deg, #ea580c, #c2410c);
-      box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
-    }
-    .btn-icon {
-      font-size: 2.2rem;
-      background: rgba(255,255,255,0.15);
-      border-radius: 18px;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .btn-text h3 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-      text-align: left;
-    }
-    .btn-text p {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.8);
-      font-weight: 600;
-      text-align: left;
-    }
-    .pitch-container {
-      background: linear-gradient(180deg, #15803d 0%, #166534 100%);
-      border-radius: 24px;
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      border: 2px solid rgba(255,255,255,0.2);
-      box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+      max-width: 420px;
+      height: 100dvh;
+      max-height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      margin-bottom: 14px;
+      padding: env(safe-area-inset-top, 6px) 10px env(safe-area-inset-bottom, 8px) 10px;
+      position: relative;
     }
-    .pitch-markings {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-    }
-    .goal-box {
-      width: 170px;
-      height: 75px;
-      border: 3px solid rgba(255,255,255,0.85);
-      border-top: none;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 8px, transparent 8px, transparent 16px);
+
+    /* Top Stats */
+    .top-bar {
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding-bottom: 6px;
-    }
-    .goal-keeper {
-      font-size: 2.4rem;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .penalty-spot {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      height: 48px;
-      width: 48px;
+      height: 38px;
+      padding: 0 4px;
     }
-    .soccer-ball {
-      font-size: 2.2rem;
-      cursor: pointer;
-      position: absolute;
-      will-change: transform;
-      z-index: 10;
-    }
-    .shoot-goal-left {
-      animation: animGoalLeft 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
-    }
-    .shoot-goal-right {
-      animation: animGoalRight 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
-    }
-    .shoot-miss-wide {
-      animation: animMissWide 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
-    }
-    .shoot-miss-crossbar {
-      animation: animMissBar 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
-    }
-    @keyframes animGoalLeft {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      100% { transform: translate3d(-52px, -118px, 0) scale(0.68) rotate(360deg); }
-    }
-    @keyframes animGoalRight {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      100% { transform: translate3d(52px, -118px, 0) scale(0.68) rotate(360deg); }
-    }
-    @keyframes animMissWide {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      100% { transform: translate3d(125px, -100px, 0) scale(0.65) rotate(420deg); }
-    }
-    @keyframes animMissBar {
-      0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-      70% { transform: translate3d(-10px, -145px, 0) scale(0.7) rotate(280deg); }
-      100% { transform: translate3d(-15px, -80px, 0) scale(0.65) rotate(360deg); }
-    }
-    .stadium-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(15, 23, 42, 0.92);
-      border: 2px solid var(--gold);
+
+    .badge {
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      padding: 14px 22px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      z-index: 50;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-      text-align: center;
-      width: 82%;
-    }
-    .stadium-overlay.active {
-      display: flex;
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-    @keyframes popIn {
-      to { transform: translate(-50%, -50%) scale(1); }
-    }
-    .task-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 16px;
-      text-align: center;
-      margin-bottom: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-    .task-question {
-      font-size: 2.2rem;
+      padding: 4px 10px;
+      font-size: 0.85rem;
       font-weight: 900;
-      font-family: 'Nunito', sans-serif;
-      color: #fbbf24;
-      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
-    .input-display {
-      font-size: 2rem;
-      min-height: 48px;
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0,0,0,0.3);
-      border: 2px dashed rgba(255,255,255,0.25);
-      border-radius: 14px;
-      margin: 8px 0;
-      color: #38bdf8;
-      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
     }
-    .numpad {
+
+    /* Spielfeld */
+    #pitch-container {
+      flex: 1;
+      min-height: 140px;
+      max-height: 220px;
+      background: repeating-linear-gradient(
+        0deg,
+        var(--pitch-green),
+        var(--pitch-green) 24px,
+        var(--pitch-stripe) 24px,
+        var(--pitch-stripe) 48px
+      );
+      border-radius: 16px;
+      position: relative;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4), 0 6px 16px rgba(0, 0, 0, 0.4);
+      margin-bottom: 6px;
+    }
+
+    #goal {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 58%;
+      height: 60px;
+      border: 3px solid #ffffff;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 7px, transparent 7px, transparent 14px);
+    }
+
+    #keeper {
+      position: absolute;
+      top: 26px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.2rem;
+      transition: left 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 2;
+    }
+
+    #ball {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      font-size: 1.9rem;
+      z-index: 3;
+      transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Aufgabenteil */
+    #task-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 10px 14px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      margin-bottom: 6px;
+    }
+
+    .task-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #90caf9;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+
+    .question {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.8rem;
+      color: var(--accent-yellow);
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+
+    .answer-display {
+      font-family: 'Fredoka', cursive;
+      font-size: 1.4rem;
+      min-height: 34px;
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--accent-cyan);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Nummernblock */
+    #keypad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: auto;
+      gap: 6px;
+      margin-bottom: 2px;
     }
-    .num-btn {
+
+    .key-btn {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      color: #fff;
-      font-size: 1.6rem;
-      font-weight: 700;
-      padding: 12px 0;
-      cursor: pointer;
-      transition: all 0.1s ease;
+      border-radius: 12px;
+      color: white;
+      font-family: 'Fredoka', cursive;
+      font-size: 1.35rem;
+      height: 44px;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .num-btn:active {
-      background: rgba(255, 255, 255, 0.25);
-      transform: scale(0.95);
-    }
-    .num-btn.shoot {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      font-size: 1.1rem;
-      font-weight: 900;
-      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-    }
-    .num-btn.delete {
-      background: rgba(239, 68, 68, 0.2);
-      color: #f87171;
-    }
-    .vocab-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-    .vocab-german {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: #38bdf8;
-      margin-bottom: 8px;
-    }
-    .choices-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .choice-btn {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 18px;
-      padding: 15px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
       cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.35);
     }
-    .choice-btn:active {
-      transform: scale(0.98);
-      background: rgba(255, 255, 255, 0.15);
+
+    .key-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.35);
     }
-    .back-nav {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 12px;
-      padding: 6px 0;
+
+    .key-submit {
+      background: linear-gradient(180deg, #00e676 0%, #00b0ff 100%);
+      color: #0b1329;
+      font-weight: 900;
       border: none;
-      background: none;
     }
-    canvas#confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+
+    .key-clear {
+      background: rgba(211, 47, 47, 0.3);
+      color: #ff8a80;
+    }
+
+    #confetti-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 100;
     }
   </style>
 </head>
 <body>
 
-  <canvas id="confetti-canvas"></canvas>
-
   <div id="app-container">
-
-    <!-- TOP BAR -->
-    <div class="top-stats">
-      <div class="stat-pill pumpkin">
-        <span>🎃</span> <span id="coin-count">0</span>
-      </div>
-      <div class="stat-pill streak">
-        <span>🔥</span> <span id="streak-count">0</span> Tore
-      </div>
-      <button class="icon-btn" id="sound-toggle" onclick="toggleMute()">🔊</button>
+    <div class="top-bar">
+      <div class="badge">🎃 <span id="stars-count">0</span></div>
+      <div class="badge">🔥 <span id="goals-count">0</span> Tore</div>
+      <button class="icon-btn" id="audio-btn">🔊</button>
     </div>
 
-    <!-- 1. HOME SCREEN -->
-    <div id="screen-home" class="screen active">
-      <div class="hero-card">
-        <div class="edgar-avatar">🐷</div>
-        <h1 style="font-size: 1.8rem; font-weight: 900; color: #fdba74;">Edgars Arena</h1>
-        <p style="font-size: 0.9rem; color: #38bdf8; font-weight: 700; margin-top: 2px;">⚽ Schmahamas Kick & Learn</p>
-        <div class="speech-bubble" id="edgar-speech">
-          „Hey Champ! Zieh dein Trikot an – heute schießen wir uns an die Tabellenspitze! 🏆“
-        </div>
-      </div>
-
-      <button class="menu-btn green" onclick="startMathMode()">
-        <div class="btn-icon">🥅</div>
-        <div class="btn-text">
-          <h3>1x1 Elfmeter-Schießen</h3>
-          <p>Kleines Einmaleins mit Power-Kick!</p>
-        </div>
-      </button>
-
-      <button class="menu-btn orange" onclick="startVocabMode()">
-        <div class="btn-icon">🇬🇧</div>
-        <div class="btn-text">
-          <h3>Englisch-Kicker</h3>
-          <p>Vokabeln 5. Klasse mit Sprachausgabe 🔊</p>
-        </div>
-      </button>
-
-      <div style="background: rgba(15,23,42,0.5); border-radius: 20px; padding: 14px; margin-top: auto; border: 1px solid var(--card-border);">
-        <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:6px;">
-          <span>Dein Rang:</span>
-          <span style="color: #fbbf24;" id="player-rank">Bolzplatz-Rookie 👟</span>
-        </div>
-        <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 99px; overflow:hidden;">
-          <div id="rank-progress" style="background: linear-gradient(90deg, #22c55e, #38bdf8); width: 0%; height:100%; transition: width 0.3s ease;"></div>
-        </div>
-        <div style="font-size:0.75rem; color:var(--text-muted); text-align:right; margin-top:4px;" id="rank-next-goals">Noch 10 Tore bis "Kreisliga-Stürmer"</div>
-      </div>
+    <div id="pitch-container">
+      <div id="goal"></div>
+      <div id="keeper">🦆</div>
+      <div id="ball">⚽</div>
     </div>
 
-    <!-- 2. GAME SCREEN (MATHE & ENGLISCH) -->
-    <div id="screen-game" class="screen">
-      <button class="back-nav" onclick="goHome()">⬅ Zurück zum Hauptmenü</button>
-
-      <!-- STADION / FELD -->
-      <div class="pitch-container">
-        <div class="goal-box">
-          <div class="goal-keeper" id="keeper">🦆</div>
-        </div>
-        <div class="penalty-spot">
-          <div class="soccer-ball" id="ball">⚽</div>
-        </div>
-
-        <div class="stadium-overlay" id="stadium-msg">
-          <div id="overlay-emoji" style="font-size: 2.8rem;">🎉</div>
-          <h2 id="overlay-title" style="color: #fbbf24; font-size: 1.5rem;">TOOOOR!</h2>
-          <p id="overlay-sub" style="font-size: 0.95rem; color: #fff;">Edgar jubelt!</p>
-        </div>
-      </div>
-
-      <!-- MATHE-BEREICH -->
-      <div id="math-controls" style="display: none; flex-direction: column; flex: 1;">
-        <div class="task-card">
-          <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; margin-bottom: 2px;">LÖSE DEN POWER-SCHUSS:</div>
-          <div class="task-question" id="math-question">7 × 8</div>
-          <div class="input-display" id="math-input">?</div>
-        </div>
-
-        <div class="numpad">
-          <button class="num-btn" onclick="pressNum(1)">1</button>
-          <button class="num-btn" onclick="pressNum(2)">2</button>
-          <button class="num-btn" onclick="pressNum(3)">3</button>
-          <button class="num-btn" onclick="pressNum(4)">4</button>
-          <button class="num-btn" onclick="pressNum(5)">5</button>
-          <button class="num-btn" onclick="pressNum(6)">6</button>
-          <button class="num-btn" onclick="pressNum(7)">7</button>
-          <button class="num-btn" onclick="pressNum(8)">8</button>
-          <button class="num-btn" onclick="pressNum(9)">9</button>
-          <button class="num-btn delete" onclick="pressDelete()">⌫</button>
-          <button class="num-btn" onclick="pressNum(0)">0</button>
-          <button class="num-btn shoot" onclick="submitMathAnswer()">SCHUSS ⚽</button>
-        </div>
-      </div>
-
-      <!-- ENGLISCH-BEREICH -->
-      <div id="vocab-controls" style="display: none; flex-direction: column; flex: 1;">
-        <div class="vocab-card">
-          <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; margin-bottom: 4px;">WAS HEISST AUF ENGLISCH:</div>
-          <div class="vocab-german" id="vocab-question">Bleistift</div>
-          <div style="display:flex; justify-content:center; gap:8px;">
-            <button class="icon-btn" onclick="speakCurrentWord()" style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 6px 14px; font-size: 0.95rem; color: #38bdf8; font-weight: 700;">
-              🔊 Anhören
-            </button>
-          </div>
-        </div>
-
-        <div class="choices-grid" id="vocab-options"></div>
-      </div>
-
+    <div id="task-container">
+      <div class="task-label">Löse den Power-Schuss:</div>
+      <div class="question" id="task-q">4 × 10</div>
+      <div class="answer-display" id="task-a">?</div>
     </div>
 
+    <div id="keypad">
+      <button class="key-btn" onclick="pressKey('1')">1</button>
+      <button class="key-btn" onclick="pressKey('2')">2</button>
+      <button class="key-btn" onclick="pressKey('3')">3</button>
+      <button class="key-btn" onclick="pressKey('4')">4</button>
+      <button class="key-btn" onclick="pressKey('5')">5</button>
+      <button class="key-btn" onclick="pressKey('6')">6</button>
+      <button class="key-btn" onclick="pressKey('7')">7</button>
+      <button class="key-btn" onclick="pressKey('8')">8</button>
+      <button class="key-btn" onclick="pressKey('9')">9</button>
+      <button class="key-btn key-clear" onclick="pressKey('C')">C</button>
+      <button class="key-btn" onclick="pressKey('0')">0</button>
+      <button class="key-btn key-submit" onclick="pressKey('OK')">➔</button>
+    </div>
   </div>
 
+  <canvas id="confetti-canvas"></canvas>
+
   <script>
-    // --- 1. GAME DATA ---
-    const VOCABS = [
-      { de: "Bleistift", en: "pencil" },
-      { de: "Buch", en: "book" },
-      { de: "Schultasche", en: "schoolbag" },
-      { de: "Lehrer", en: "teacher" },
-      { de: "Hausaufgabe", en: "homework" },
-      { de: "Freund", en: "friend" },
-      { de: "Hund", en: "dog" },
-      { de: "Katze", en: "cat" },
-      { de: "Küche", en: "kitchen" },
-      { de: "Frühstück", en: "breakfast" },
-      { de: "Fußball", en: "football" },
-      { de: "Torwart", en: "goalkeeper" },
-      { de: "Schwein", en: "pig" },
-      { de: "Kürbis", en: "pumpkin" },
-      { de: "Abenteuer", en: "adventure" },
-      { de: "glücklich", en: "happy" },
-      { de: "schnell", en: "fast" },
-      { de: "gewinnen", en: "win" }
-    ];
+    let goals = 0;
+    let stars = 0;
+    let currentInput = "";
+    let n1 = 4, n2 = 10, correctAnswer = 40;
+    let audioEnabled = true;
 
-    const RANKS = [
-      { name: "Bolzplatz-Rookie 👟", goals: 0 },
-      { name: "Kreisliga-Stürmer ⚽", goals: 10 },
-      { name: "Schmahamas-Talent 🌴", goals: 25 },
-      { name: "Edgars Sturmpartner 🐷", goals: 50 },
-      { name: "Paluten-Legende 👑", goals: 100 }
-    ];
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // --- 2. GAME STATE ---
-    let state = {
-      coins: parseInt(localStorage.getItem('edgar_coins') || '0'),
-      totalGoals: parseInt(localStorage.getItem('edgar_goals') || '0'),
-      streak: 0,
-      soundMuted: false,
-      currentMode: null,
-      currentAnswer: null,
-      inputStr: "",
-      isAnimating: false,
-      currentVocabItem: null
-    };
-
-    // --- 3. AUDIO ENGINE ---
-    let audioCtx = null;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    document.addEventListener('touchstart', initAudio, { once: true });
-    document.addEventListener('click', initAudio, { once: true });
-
-    function playStadiumCheer() {
-      if (state.soundMuted) return;
-      initAudio();
-      if (!audioCtx) return;
-
-      const bufferSize = audioCtx.sampleRate * 1.5;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buffer;
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(400, audioCtx.currentTime);
-      filter.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.3);
-      filter.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 1.5);
-
-      const gain = audioCtx.createGain();
-      gain.gain.setValueAtTime(0, audioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.2);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-      noise.start();
-
-      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const noteGain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-        const startT = audioCtx.currentTime + (idx * 0.08);
-        noteGain.gain.setValueAtTime(0, startT);
-        noteGain.gain.linearRampToValueAtTime(0.2, startT + 0.02);
-        noteGain.gain.exponentialRampToValueAtTime(0.001, startT + 0.4);
-
-        osc.connect(noteGain);
-        noteGain.connect(audioCtx.destination);
-        osc.start(startT);
-        osc.stop(startT + 0.4);
-      });
-    }
-
-    function playMissSound() {
-      if (state.soundMuted) return;
-      initAudio();
-      if (!audioCtx) return;
-
+    function playTone(freq, type, duration) {
+      if (!audioEnabled || !audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(140, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.35);
-
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.35);
+      osc.stop(audioCtx.currentTime + duration);
     }
 
-    function speakEnglish(word) {
-      if (state.soundMuted) return;
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
-      }
+    function newTask() {
+      n1 = Math.floor(Math.random() * 9) + 2;
+      n2 = Math.floor(Math.random() * 9) + 2;
+      correctAnswer = n1 * n2;
+      document.getElementById('task-q').innerText = `${n1} × ${n2}`;
+      currentInput = "";
+      document.getElementById('task-a').innerText = "?";
+      
+      const keeper = document.getElementById('keeper');
+      keeper.style.left = "50%";
+      const ball = document.getElementById('ball');
+      ball.style.transition = 'none';
+      ball.style.bottom = "12px";
+      ball.style.left = "50%";
+      ball.style.transform = "translate(-50%, 50%) scale(1)";
+      setTimeout(() => { ball.style.transition = 'all 0.45s cubic-bezier(0.25, 1, 0.5, 1)'; }, 20);
     }
 
-    function toggleMute() {
-      state.soundMuted = !state.soundMuted;
-      document.getElementById('sound-toggle').innerText = state.soundMuted ? '🔇' : '🔊';
-    }
-
-    // --- 4. GAME ENGINE ---
-    function updateUI() {
-      document.getElementById('coin-count').innerText = state.coins;
-      document.getElementById('streak-count').innerText = state.streak;
-
-      let currentRank = RANKS[0];
-      let nextRank = null;
-      for (let i = 0; i < RANKS.length; i++) {
-        if (state.totalGoals >= RANKS[i].goals) {
-          currentRank = RANKS[i];
-          nextRank = RANKS[i + 1] || null;
+    function pressKey(val) {
+      if (val === 'C') {
+        currentInput = "";
+        document.getElementById('task-a').innerText = "?";
+        playTone(220, 'sine', 0.1);
+      } else if (val === 'OK') {
+        checkResult();
+      } else {
+        if (currentInput.length < 3) {
+          currentInput += val;
+          document.getElementById('task-a').innerText = currentInput;
+          playTone(440, 'triangle', 0.08);
         }
       }
-
-      document.getElementById('player-rank').innerText = currentRank.name;
-      if (nextRank) {
-        const progress = ((state.totalGoals - currentRank.goals) / (nextRank.goals - currentRank.goals)) * 100;
-        document.getElementById('rank-progress').style.width = `${Math.min(100, Math.max(0, progress))}%`;
-        document.getElementById('rank-next-goals').innerText = `Noch ${nextRank.goals - state.totalGoals} Tore bis "${nextRank.name.split(' ')[0]}"`;
-      } else {
-        document.getElementById('rank-progress').style.width = '100%';
-        document.getElementById('rank-next-goals').innerText = `Du bist die ultimative Legende!`;
-      }
-
-      localStorage.setItem('edgar_coins', state.coins.toString());
-      localStorage.setItem('edgar_goals', state.totalGoals.toString());
     }
 
-    function switchScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-    }
+    function checkResult() {
+      const userAns = parseInt(currentInput, 10);
+      if (isNaN(userAns)) return;
 
-    function goHome() {
-      state.isAnimating = false;
-      resetField();
-      switchScreen('screen-home');
-      updateUI();
-    }
-
-    function resetField() {
-      const ball = document.getElementById('ball');
-      ball.className = 'soccer-ball';
-      ball.style.transform = '';
-      void ball.offsetWidth;
-
-      const keeper = document.getElementById('keeper');
-      keeper.innerText = '🦆';
-      keeper.style.transform = 'none';
-
-      document.getElementById('stadium-msg').classList.remove('active');
-    }
-
-    // --- 5. MATH MODE ---
-    function startMathMode() {
-      state.currentMode = 'math';
-      switchScreen('screen-game');
-      document.getElementById('math-controls').style.display = 'flex';
-      document.getElementById('vocab-controls').style.display = 'none';
-      nextMathTask();
-    }
-
-    function nextMathTask() {
-      resetField();
-      state.isAnimating = false;
-      state.inputStr = "";
-      document.getElementById('math-input').innerText = "?";
-
-      const a = Math.floor(Math.random() * 8) + 2;
-      const b = Math.floor(Math.random() * 9) + 2;
-      state.currentAnswer = a * b;
-
-      document.getElementById('math-question').innerText = `${a} × ${b}`;
-    }
-
-    function pressNum(digit) {
-      if (state.isAnimating || state.inputStr.length >= 3) return;
-      state.inputStr += digit.toString();
-      document.getElementById('math-input').innerText = state.inputStr;
-    }
-
-    function pressDelete() {
-      if (state.isAnimating) return;
-      state.inputStr = state.inputStr.slice(0, -1);
-      document.getElementById('math-input').innerText = state.inputStr.length > 0 ? state.inputStr : "?";
-    }
-
-    function submitMathAnswer() {
-      if (state.isAnimating || state.inputStr.length === 0) return;
-      const playerVal = parseInt(state.inputStr, 10);
-      executeShot(playerVal === state.currentAnswer, `${document.getElementById('math-question').innerText} = ${state.currentAnswer}`, nextMathTask);
-    }
-
-    // --- 6. VOCAB MODE ---
-    function startVocabMode() {
-      state.currentMode = 'vocab';
-      switchScreen('screen-game');
-      document.getElementById('math-controls').style.display = 'none';
-      document.getElementById('vocab-controls').style.display = 'flex';
-      nextVocabTask();
-    }
-
-    function nextVocabTask() {
-      resetField();
-      state.isAnimating = false;
-
-      const item = VOCABS[Math.floor(Math.random() * VOCABS.length)];
-      state.currentVocabItem = item;
-      state.currentAnswer = item.en;
-
-      document.getElementById('vocab-question').innerText = item.de;
-
-      let distractors = VOCABS.filter(v => v.en !== item.en).map(v => v.en);
-      distractors.sort(() => Math.random() - 0.5);
-      let options = [item.en, distractors[0], distractors[1]];
-      options.sort(() => Math.random() - 0.5);
-
-      const grid = document.getElementById('vocab-options');
-      grid.innerHTML = "";
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'choice-btn';
-        btn.innerHTML = `<span>${opt}</span> <span>⚽</span>`;
-        btn.onclick = () => {
-          if (state.isAnimating) return;
-          speakEnglish(item.en);
-          executeShot(opt === item.en, `Richtig: "${item.de}" = ${item.en}`, nextVocabTask);
-        };
-        grid.appendChild(btn);
-      });
-    }
-
-    function speakCurrentWord() {
-      if (state.currentVocabItem) {
-        speakEnglish(state.currentVocabItem.en);
-      }
-    }
-
-    // --- 7. SHOOT LOGIC & JUBEL ---
-    function executeShot(isSuccess, solutionText, nextTaskCallback) {
-      state.isAnimating = true;
       const ball = document.getElementById('ball');
       const keeper = document.getElementById('keeper');
-      const overlay = document.getElementById('stadium-msg');
-      const overlayTitle = document.getElementById('overlay-title');
-      const overlaySub = document.getElementById('overlay-sub');
-      const overlayEmoji = document.getElementById('overlay-emoji');
 
-      if (isSuccess) {
-        const kickDir = Math.random() > 0.5 ? 'left' : 'right';
-        ball.className = `soccer-ball ${kickDir === 'left' ? 'shoot-goal-left' : 'shoot-goal-right'}`;
-        keeper.style.transform = kickDir === 'left' ? 'translateX(65px)' : 'translateX(-65px)';
-        keeper.innerText = '😵';
+      if (userAns === correctAnswer) {
+        goals++;
+        stars += 2;
+        document.getElementById('goals-count').innerText = goals;
+        document.getElementById('stars-count').innerText = stars;
 
-        setTimeout(() => {
-          playStadiumCheer();
-          triggerConfetti();
+        const targetX = Math.random() > 0.5 ? 28 : 72;
+        const keeperX = targetX > 50 ? 25 : 75;
 
-          state.coins += 5;
-          state.totalGoals += 1;
-          state.streak += 1;
-          updateUI();
+        keeper.style.left = keeperX + "%";
+        ball.style.bottom = "140px";
+        ball.style.left = targetX + "%";
+        ball.style.transform = "translate(-50%, 50%) scale(0.65)";
 
-          overlayEmoji.innerText = '🎉';
-          overlayTitle.innerText = 'TOOOOR!';
-          overlayTitle.style.color = '#fbbf24';
-          overlaySub.innerText = 'Sauber verwandelt!';
-          overlay.classList.add('active');
+        playTone(523, 'sine', 0.15);
+        setTimeout(() => playTone(659, 'sine', 0.2), 120);
+        setTimeout(() => playTone(784, 'sine', 0.35), 240);
 
-          setTimeout(nextTaskCallback, 1800);
-        }, 450);
-
+        setTimeout(newTask, 1000);
       } else {
-        const missDir = Math.random() > 0.5 ? 'wide' : 'bar';
-        ball.className = `soccer-ball ${missDir === 'wide' ? 'shoot-miss-wide' : 'shoot-miss-crossbar'}`;
-        keeper.style.transform = 'translateY(-10px) scale(1.15)';
-        keeper.innerText = '😎';
+        keeper.style.left = "50%";
+        ball.style.bottom = "120px";
+        ball.style.left = "50%";
+        ball.style.transform = "translate(-50%, 50%) scale(0.7)";
 
+        playTone(200, 'sawtooth', 0.25);
+        setTimeout(() => playTone(150, 'sawtooth', 0.3), 150);
+
+        currentInput = "";
+        document.getElementById('task-a').innerText = "❌";
         setTimeout(() => {
-          playMissSound();
-          state.streak = 0;
-          updateUI();
-
-          overlayEmoji.innerText = '❌';
-          overlayTitle.innerText = 'Daneben!';
-          overlayTitle.style.color = '#f87171';
-          overlaySub.innerText = solutionText;
-          overlay.classList.add('active');
-
-          setTimeout(nextTaskCallback, 2300);
-        }, 450);
+          document.getElementById('task-a').innerText = "?";
+          ball.style.bottom = "12px";
+          ball.style.transform = "translate(-50%, 50%) scale(1)";
+        }, 800);
       }
     }
 
-    // --- 8. KONFETTI ---
-    function triggerConfetti() {
-      const canvas = document.getElementById('confetti-canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      const particles = [];
-      const colors = ['#f59e0b', '#22c55e', '#3b82f6', '#ec4899', '#ffffff'];
-
-      for (let i = 0; i < 45; i++) {
-        particles.push({
-          x: canvas.width / 2,
-          y: canvas.height * 0.45,
-          vx: (Math.random() - 0.5) * 12,
-          vy: (Math.random() - 0.9) * 14,
-          size: Math.random() * 7 + 4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: Math.random() * 360,
-          vRot: (Math.random() - 0.5) * 10
-        });
-      }
-
-      let frame = 0;
-      function anim() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += 0.45;
-          p.rotation += p.vRot;
-
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate((p.rotation * Math.PI) / 180);
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-          ctx.restore();
-        });
-
-        frame++;
-        if (frame < 60) {
-          requestAnimationFrame(anim);
-        } else {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-      }
-      anim();
-    }
-
-    updateUI();
+    document.getElementById('audio-btn').onclick = () => {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audio-btn').innerText = audioEnabled ? '🔊' : '🔇';
+    };
   </script>
 </body>
 </html>
