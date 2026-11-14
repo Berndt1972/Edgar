@@ -128,6 +128,7 @@
       justify-content: center;
       font-size: 2rem;
       box-shadow: 0 0 16px rgba(255,128,171,0.4);
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .hero-title {
@@ -242,6 +243,7 @@
       flex-shrink: 0;
     }
 
+    /* Spielfeld (Nur für Mathe) */
     #pitch-container {
       flex: 1 1 auto;
       min-height: 60px;
@@ -293,10 +295,48 @@
       transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
+    /* Edgar-Coach Bereich (Nur für Englisch) */
+    #edgar-coach-box {
+      flex: 1 1 auto;
+      min-height: 80px;
+      max-height: 135px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 12px;
+      margin: 2px 0 4px 0;
+      text-align: center;
+    }
+
+    #edgar-coach-avatar {
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #ff80ab 20%, rgba(255,128,171,0.2) 70%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.9rem;
+      box-shadow: 0 0 14px rgba(255,128,171,0.4);
+      margin-bottom: 4px;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #edgar-coach-msg {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #e0e0e0;
+      line-height: 1.2;
+    }
+
     #task-container {
       background: var(--card-bg);
       border-radius: 10px;
-      padding: 4px 8px;
+      padding: 5px 8px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 4px;
@@ -321,14 +361,6 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
-    }
-
-    .speak-inline {
-      background: none;
-      border: none;
-      color: #00e5ff;
-      font-size: 1.1rem;
-      cursor: pointer;
     }
 
     .answer-display {
@@ -449,7 +481,7 @@
           <div class="mode-icon">🇬🇧</div>
           <div class="mode-info">
             <h3>Englisch-Kicker (220+ Wörter)</h3>
-            <p>Vokabeln 5. Klasse mit Sprachausgabe 🔊</p>
+            <p>Vokabeln 5. Klasse mit Edgar & Audio 🔊</p>
           </div>
         </button>
       </div>
@@ -466,17 +498,23 @@
     <div id="view-game" class="view">
       <button class="back-btn" onclick="goToMenu()">⬅ Zurück zum Hauptmenü</button>
 
+      <!-- Fußballtor (Nur für Mathe) -->
       <div id="pitch-container">
         <div id="goal"></div>
         <div id="keeper">🦆</div>
         <div id="ball">⚽</div>
       </div>
 
+      <!-- Edgar Coach (Nur für Englisch) -->
+      <div id="edgar-coach-box" style="display: none;">
+        <div id="edgar-coach-avatar">🐷</div>
+        <div id="edgar-coach-msg">„Übersetze das Wort ins Englische, Champ! 🇬🇧“</div>
+      </div>
+
       <div id="task-container">
         <div class="task-label" id="task-mode-title">Löse den Power-Schuss:</div>
         <div class="question" id="task-q">
           <span id="question-text">4 × 8</span>
-          <button id="speak-btn" class="speak-inline" style="display:none;" onclick="speakCurrentWord()">🔊</button>
         </div>
         <div class="answer-display" id="task-a">?</div>
       </div>
@@ -515,9 +553,8 @@
     let correctAnswer = 0;
     let currentEnglishWord = "";
     let audioEnabled = true;
-    let vocabPool = []; // Verhindert direkte Wiederholungen
+    let vocabPool = [];
 
-    // Erweiterte Vokabeldatenbank Klasse 5 (225 Wörter)
     const vocabulary = [
       // Schule & Unterricht
       { en: "school", de: "Schule" }, { en: "teacher", de: "Lehrer" }, { en: "student", de: "Schüler" },
@@ -642,9 +679,9 @@
       document.getElementById('audio-btn').innerText = audioEnabled ? '🔊' : '🔇';
     }
 
-    function speakCurrentWord() {
-      if (!audioEnabled || !currentEnglishWord || !('speechSynthesis' in window)) return;
-      const utterance = new SpeechSynthesisUtterance(currentEnglishWord);
+    function speakWord(word) {
+      if (!audioEnabled || !word || !('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(word);
       utterance.lang = 'en-US';
       utterance.rate = 0.9;
       window.speechSynthesis.cancel();
@@ -674,18 +711,20 @@
       document.getElementById('view-game').classList.add('active');
 
       if (mode === 'math') {
+        document.getElementById('pitch-container').style.display = 'block';
+        document.getElementById('edgar-coach-box').style.display = 'none';
         document.getElementById('task-mode-title').innerText = "Löse den Power-Schuss:";
         document.getElementById('keypad').style.display = 'grid';
         document.getElementById('choice-grid').style.display = 'none';
         document.getElementById('task-a').style.display = 'flex';
-        document.getElementById('speak-btn').style.display = 'none';
         nextMathTask();
       } else {
-        document.getElementById('task-mode-title').innerText = "Wähle das richtige deutsche Wort:";
+        document.getElementById('pitch-container').style.display = 'none';
+        document.getElementById('edgar-coach-box').style.display = 'flex';
+        document.getElementById('task-mode-title').innerText = "Wähle das richtige englische Wort:";
         document.getElementById('keypad').style.display = 'none';
         document.getElementById('choice-grid').style.display = 'grid';
         document.getElementById('task-a').style.display = 'none';
-        document.getElementById('speak-btn').style.display = 'inline-block';
         nextEnglishTask();
       }
     }
@@ -739,9 +778,9 @@
       if (isNaN(userAns)) return;
 
       if (userAns === correctAnswer) {
-        shootGoal(true, () => nextMathTask());
+        shootMathGoal(true, () => nextMathTask());
       } else {
-        shootGoal(false, () => {
+        shootMathGoal(false, () => {
           currentInput = "";
           document.getElementById('task-a').innerText = "?";
           resetBallAndKeeper();
@@ -749,54 +788,7 @@
       }
     }
 
-    /* ENGLISCH (Ohne Wiederholungen über Shuffle-Bag) */
-    function getNextVocab() {
-      if (vocabPool.length === 0) {
-        vocabPool = [...vocabulary];
-        for (let i = vocabPool.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [vocabPool[i], vocabPool[j]] = [vocabPool[j], vocabPool[i]];
-        }
-      }
-      return vocabPool.pop();
-    }
-
-    function nextEnglishTask() {
-      resetBallAndKeeper();
-      const current = getNextVocab();
-      currentEnglishWord = current.en;
-      document.getElementById('question-text').innerText = current.en;
-      speakCurrentWord();
-
-      const options = [current.de];
-      while (options.length < 4) {
-        const rand = vocabulary[Math.floor(Math.random() * vocabulary.length)].de;
-        if (!options.includes(rand)) options.push(rand);
-      }
-      options.sort(() => Math.random() - 0.5);
-
-      for (let i = 0; i < 4; i++) {
-        const btn = document.getElementById(`choice-${i}`);
-        btn.innerText = options[i];
-        btn.dataset.correct = (options[i] === current.de);
-      }
-    }
-
-    function chooseAnswer(index) {
-      const btn = document.getElementById(`choice-${index}`);
-      const isCorrect = (btn.dataset.correct === "true");
-
-      if (isCorrect) {
-        shootGoal(true, () => nextEnglishTask());
-      } else {
-        shootGoal(false, () => {
-          resetBallAndKeeper();
-        });
-      }
-    }
-
-    /* SCHUSS & ANIMATION */
-    function shootGoal(success, callback) {
+    function shootMathGoal(success, callback) {
       const ball = document.getElementById('ball');
       const keeper = document.getElementById('keeper');
 
@@ -818,7 +810,7 @@
         setTimeout(() => playTone(659, 'sine', 0.15), 100);
         setTimeout(() => playTone(784, 'sine', 0.3), 200);
 
-        setTimeout(callback, 850);
+        setTimeout(callback, 950);
       } else {
         keeper.style.left = "50%";
         ball.style.bottom = "60px";
@@ -828,10 +820,86 @@
         playTone(200, 'sawtooth', 0.2);
         setTimeout(() => playTone(150, 'sawtooth', 0.25), 120);
 
-        if (currentGameMode === 'math') {
-          document.getElementById('task-a').innerText = "❌";
+        document.getElementById('task-a').innerText = "❌";
+        setTimeout(callback, 850);
+      }
+    }
+
+    /* ENGLISCH (Edgar Coach + Deutsch -> Englisch) */
+    function getNextVocab() {
+      if (vocabPool.length === 0) {
+        vocabPool = [...vocabulary];
+        for (let i = vocabPool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [vocabPool[i], vocabPool[j]] = [vocabPool[j], vocabPool[i]];
         }
-        setTimeout(callback, 750);
+      }
+      return vocabPool.pop();
+    }
+
+    function nextEnglishTask() {
+      const avatar = document.getElementById('edgar-coach-avatar');
+      const msg = document.getElementById('edgar-coach-msg');
+      avatar.innerText = "🐷";
+      avatar.style.transform = "scale(1)";
+      msg.innerText = "„Übersetze das Wort ins Englische, Champ! 🇬🇧“";
+      msg.style.color = "#e0e0e0";
+
+      const current = getNextVocab();
+      currentEnglishWord = current.en;
+      document.getElementById('question-text').innerText = current.de;
+
+      const options = [current.en];
+      while (options.length < 4) {
+        const rand = vocabulary[Math.floor(Math.random() * vocabulary.length)].en;
+        if (!options.includes(rand)) options.push(rand);
+      }
+      options.sort(() => Math.random() - 0.5);
+
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`choice-${i}`);
+        btn.innerText = options[i];
+        btn.dataset.correct = (options[i] === current.en);
+      }
+    }
+
+    function chooseAnswer(index) {
+      const btn = document.getElementById(`choice-${index}`);
+      const isCorrect = (btn.dataset.correct === "true");
+      const avatar = document.getElementById('edgar-coach-avatar');
+      const msg = document.getElementById('edgar-coach-msg');
+
+      speakWord(currentEnglishWord);
+
+      if (isCorrect) {
+        goals++;
+        stars += 2;
+        document.getElementById('goals-count').innerText = goals;
+        document.getElementById('stars-count').innerText = stars;
+
+        avatar.innerText = "🥳";
+        avatar.style.transform = "scale(1.2)";
+        msg.innerText = `„Klasse! '${currentEnglishWord}' ist goldrichtig! 🏆“`;
+        msg.style.color = "#00e676";
+
+        playTone(523, 'sine', 0.12);
+        setTimeout(() => playTone(659, 'sine', 0.15), 100);
+        setTimeout(() => playTone(784, 'sine', 0.3), 200);
+
+        setTimeout(() => nextEnglishTask(), 1100);
+      } else {
+        avatar.innerText = "🤔";
+        avatar.style.transform = "scale(0.95)";
+        msg.innerText = `„Knapp vorbei! Richtig wäre '${currentEnglishWord}'. Versuch's noch mal!“`;
+        msg.style.color = "#ff8a80";
+
+        playTone(200, 'sawtooth', 0.2);
+        setTimeout(() => playTone(150, 'sawtooth', 0.25), 120);
+
+        setTimeout(() => {
+          avatar.innerText = "🐷";
+          avatar.style.transform = "scale(1)";
+        }, 1200);
       }
     }
   </script>
