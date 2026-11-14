@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Edgars Arena</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="https://fav.farm/⚽">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: max(env(safe-area-inset-top), 6px) 12px max(env(safe-area-inset-bottom), 10px) 12px;
+      padding: calc(env(safe-area-inset-top, 0px) + 12px) 12px max(env(safe-area-inset-bottom), 12px) 12px;
       position: relative;
     }
 
@@ -64,29 +64,31 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 28px;
+      height: 32px;
       flex-shrink: 0;
+      margin-bottom: 4px;
+      z-index: 10;
     }
 
     .badge {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       border-radius: 16px;
-      padding: 2px 8px;
-      font-size: 0.78rem;
+      padding: 3px 10px;
+      font-size: 0.8rem;
       font-weight: 900;
       display: flex;
       align-items: center;
       gap: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
     .icon-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       color: white;
       border-radius: 50%;
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -232,14 +234,14 @@
     .back-btn {
       background: none;
       border: none;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.78rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 4px;
       cursor: pointer;
-      margin: 2px 0;
+      margin: 2px 0 4px 0;
       flex-shrink: 0;
     }
 
@@ -570,7 +572,7 @@
     let currentEnglishWord = "";
     let audioEnabled = true;
     let vocabPool = [];
-    let isProcessing = false; // Verhindert Mehrfach-Klicks pro Aufgabe
+    let isProcessing = false;
 
     const vocabulary = [
       // Schule & Unterricht
@@ -851,7 +853,7 @@
       }
     }
 
-    /* ENGLISCH (Edgar Coach + Deutsch -> Englisch + Klick-Sperre) */
+    /* ENGLISCH */
     function getNextVocab() {
       if (vocabPool.length === 0) {
         vocabPool = [...vocabulary];
@@ -892,10 +894,9 @@
     }
 
     function chooseAnswer(index) {
-      if (isProcessing) return; // Blockiert sofort jedes weitere Tippen!
+      if (isProcessing) return;
       isProcessing = true;
 
-      // Alle Buttons optisch sperren
       for (let i = 0; i < 4; i++) {
         document.getElementById(`choice-${i}`).classList.add('locked');
       }
