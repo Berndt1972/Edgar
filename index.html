@@ -440,11 +440,27 @@
       text-align: center;
       cursor: pointer;
       box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+      transition: background 0.15s, border-color 0.15s;
     }
 
     .choice-btn:active {
       transform: translateY(2px);
       box-shadow: none;
+    }
+
+    .choice-btn.locked {
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .choice-btn.correct-flash {
+      background: rgba(0, 230, 118, 0.35);
+      border-color: #00e676;
+    }
+
+    .choice-btn.wrong-flash {
+      background: rgba(211, 47, 47, 0.45);
+      border-color: #ff5252;
     }
   </style>
 </head>
@@ -554,6 +570,7 @@
     let currentEnglishWord = "";
     let audioEnabled = true;
     let vocabPool = [];
+    let isProcessing = false; // Verhindert Mehrfach-Klicks pro Aufgabe
 
     const vocabulary = [
       // Schule & Unterricht
@@ -707,6 +724,7 @@
 
     function startGame(mode) {
       currentGameMode = mode;
+      isProcessing = false;
       document.getElementById('view-menu').classList.remove('active');
       document.getElementById('view-game').classList.add('active');
 
@@ -730,6 +748,7 @@
     }
 
     function goToMenu() {
+      isProcessing = false;
       document.getElementById('view-game').classList.remove('active');
       document.getElementById('view-menu').classList.add('active');
       updateRank();
@@ -748,6 +767,7 @@
 
     /* MATHE */
     function nextMathTask() {
+      isProcessing = false;
       const n1 = Math.floor(Math.random() * 9) + 2;
       const n2 = Math.floor(Math.random() * 9) + 2;
       correctAnswer = n1 * n2;
@@ -758,6 +778,8 @@
     }
 
     function pressKey(val) {
+      if (isProcessing) return;
+
       if (val === 'C') {
         currentInput = "";
         document.getElementById('task-a').innerText = "?";
@@ -774,8 +796,11 @@
     }
 
     function checkMathResult() {
+      if (isProcessing) return;
       const userAns = parseInt(currentInput, 10);
       if (isNaN(userAns)) return;
+
+      isProcessing = true;
 
       if (userAns === correctAnswer) {
         shootMathGoal(true, () => nextMathTask());
@@ -784,6 +809,7 @@
           currentInput = "";
           document.getElementById('task-a').innerText = "?";
           resetBallAndKeeper();
+          isProcessing = false;
         });
       }
     }
@@ -825,7 +851,7 @@
       }
     }
 
-    /* ENGLISCH (Edgar Coach + Deutsch -> Englisch) */
+    /* ENGLISCH (Edgar Coach + Deutsch -> Englisch + Klick-Sperre) */
     function getNextVocab() {
       if (vocabPool.length === 0) {
         vocabPool = [...vocabulary];
@@ -838,6 +864,7 @@
     }
 
     function nextEnglishTask() {
+      isProcessing = false;
       const avatar = document.getElementById('edgar-coach-avatar');
       const msg = document.getElementById('edgar-coach-msg');
       avatar.innerText = "🐷";
@@ -860,10 +887,19 @@
         const btn = document.getElementById(`choice-${i}`);
         btn.innerText = options[i];
         btn.dataset.correct = (options[i] === current.en);
+        btn.classList.remove('locked', 'correct-flash', 'wrong-flash');
       }
     }
 
     function chooseAnswer(index) {
+      if (isProcessing) return; // Blockiert sofort jedes weitere Tippen!
+      isProcessing = true;
+
+      // Alle Buttons optisch sperren
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`choice-${i}`).classList.add('locked');
+      }
+
       const btn = document.getElementById(`choice-${index}`);
       const isCorrect = (btn.dataset.correct === "true");
       const avatar = document.getElementById('edgar-coach-avatar');
@@ -872,6 +908,7 @@
       speakWord(currentEnglishWord);
 
       if (isCorrect) {
+        btn.classList.add('correct-flash');
         goals++;
         stars += 2;
         document.getElementById('goals-count').innerText = goals;
@@ -888,6 +925,7 @@
 
         setTimeout(() => nextEnglishTask(), 1100);
       } else {
+        btn.classList.add('wrong-flash');
         avatar.innerText = "🤔";
         avatar.style.transform = "scale(0.95)";
         msg.innerText = `„Knapp vorbei! Richtig wäre '${currentEnglishWord}'. Versuch's noch mal!“`;
@@ -899,6 +937,10 @@
         setTimeout(() => {
           avatar.innerText = "🐷";
           avatar.style.transform = "scale(1)";
+          for (let i = 0; i < 4; i++) {
+            document.getElementById(`choice-${i}`).classList.remove('locked', 'wrong-flash');
+          }
+          isProcessing = false;
         }, 1200);
       }
     }
